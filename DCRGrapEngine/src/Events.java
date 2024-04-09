@@ -20,8 +20,6 @@ public class Events {
     public static String s ="report delays";
     public static String t ="handing over the food to customer";
     public static String u ="successful delivery";
-    //public static String v ="voucher for next order";
+    public static String v ="voucher for next order";
     public static String w ="extension for 5 min";
-//    public static String x ="";
-//    public static String y ="";
 }

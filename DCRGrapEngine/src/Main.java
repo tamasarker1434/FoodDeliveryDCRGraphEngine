@@ -1,4 +1,8 @@
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
+
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     // Events
@@ -12,13 +16,24 @@ public class Main {
     private static HashSet<String> pending = new HashSet<String>();
     private static HashSet<String> excluded = new HashSet<String>();
     private static HashSet<String> tempEvents = new HashSet<String>();
+    //Customer Activity Tracking
+    public static HashSet<String> customerActivity= new HashSet<>();
     public static void initializeGraph(){
         addEvent();
         addFinalStates();
+        AddCustomerActivity();
         Relations.addConditionForEvent();
         Relations.addResponsesToEvent();
         Relations.addExcludesToEvent();
     }
+
+    private static void AddCustomerActivity() {
+        customerActivity.add("food delivery app");
+        customerActivity.add("select food");
+        customerActivity.add("provide address");
+        customerActivity.add("pays for food");
+    }
+
     private static void addFinalStates() {
         finalStates.add("get refund");
         finalStates.add("successful delivery");
@@ -36,6 +51,7 @@ public class Main {
             }
         }
     }
+    private static LocalDateTime lastActivityTime;
     public static String label = "";
     public static void main(String[] args) {
         initializeGraph();
@@ -55,21 +71,19 @@ public class Main {
                 }
                 ExecutePending();
             }
-            System.out.println("Traces: " + traces);
         }
-        System.out.println("executed events: " + executed);
-        System.out.println("included events: " + included);
-        System.out.println("Pending events: " + pending);
-        System.out.println("excluded events: " + excluded);
-        System.out.println("TempEvents: " + tempEvents);
-        System.out.println("Events: " + events);
-        System.out.println("Traces: " + traces);
+        Duration duration = Duration.between(lastActivityTime, LocalDateTime.now());
+        long minutesTotal = duration.toMinutes();
+        if (minutesTotal > 65) {
+            ExecuteSingleEvent(Events.v);
+        }
+        System.out.println("\n" +"Traces: " + traces+"\n" );
         System.out.println("Check the enabledness of Events!");
         for (String item : events){
             if (enabled(item))
-                System.out.println("\n" + item + " Event is enabled!\n");
+                System.out.println("\n" + item + " Event is enabled!");
             else
-                System.out.println("\n" + item + " Event is not enabled!\n");
+                System.out.println("\n" + item + " Event is not enabled!");
         }
     }
     private static void ExecutePending() {
@@ -92,7 +106,7 @@ public class Main {
     }
     private static void AddPendingEvents() {
         for (String event : tempEvents){
-            if (!Relations.conditionsFor.containsKey(event))
+            if (!Relations.conditionsFor.containsKey(event) && !Objects.equals(event, Events.v))
                 pending.add(event);
         }
     }
@@ -130,6 +144,25 @@ public class Main {
         }
     }
     private static void ExecuteSingleEvent(String event) {
+        if (lastActivityTime == null)
+            lastActivityTime = LocalDateTime.now();
+        else{
+            Duration duration = Duration.between(lastActivityTime, LocalDateTime.now());
+            long minutesInactive = duration.toMinutes();
+            if (customerActivity.contains(event) && minutesInactive > 10){
+                for (String s : customerActivity) {
+                    // Check if the event is already present in the pending HashMap
+                    pending.remove(s);
+                    excluded.remove(s);
+                    included.remove(s);
+                }
+                pending.addAll(customerActivity);
+            }
+            else {
+                if (customerActivity.contains(Events.g))
+                    lastActivityTime = LocalDateTime.now();
+            }
+        }
         executed.add(event);
         pending.remove(event);
         tempEvents.remove(event);

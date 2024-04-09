@@ -99,6 +99,7 @@ public class Relations {
             add(Events.g);
         }});
         responsesTo.put(Events.g, new HashSet<String>() {{
+            add(Events.h);
             add(Events.i);
         }});
         responsesTo.put(Events.j, new HashSet<String>() {{
@@ -125,6 +126,7 @@ public class Relations {
         }});
         responsesTo.put(Events.r, new HashSet<String>() {{
             add(Events.t);
+            add(Events.w);
         }});
         responsesTo.put(Events.t, new HashSet<String>() {{
             add(Events.u);
