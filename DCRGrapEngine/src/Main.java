@@ -1,13 +1,12 @@
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Main {
     static Scanner scanner = new Scanner(System.in);
     // Events
     public static HashSet<String> events = new HashSet<String>();
-    public static HashSet<String> finalStates = new HashSet<String>(){};
+    public static HashSet<String> finalStates = new HashSet<String>();
     //Traces
     private static Queue<String> traces= new LinkedList<>();
     //DCR Graph Marking
@@ -28,10 +27,10 @@ public class Main {
     }
 
     private static void AddCustomerActivity() {
-        customerActivity.add("food delivery app");
-        customerActivity.add("select food");
-        customerActivity.add("provide address");
-        customerActivity.add("pays for food");
+        customerActivity.add(Events.a);
+        customerActivity.add(Events.b);
+        customerActivity.add(Events.c);
+        customerActivity.add(Events.d);
     }
 
     private static void addFinalStates() {
@@ -75,6 +74,7 @@ public class Main {
         Duration duration = Duration.between(lastActivityTime, LocalDateTime.now());
         long minutesTotal = duration.toMinutes();
         if (minutesTotal > 65) {
+            ExecuteSingleEvent(TimelyEvents.c);
             ExecuteSingleEvent(Events.v);
         }
         System.out.println("\n" +"Traces: " + traces+"\n" );
@@ -156,7 +156,8 @@ public class Main {
                     excluded.remove(s);
                     included.remove(s);
                 }
-                pending.addAll(customerActivity);
+                pending.add(Events.a);
+                traces.add(TimelyEvents.b);
             }
             else {
                 if (customerActivity.contains(Events.g))

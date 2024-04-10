@@ -55,8 +55,11 @@ public class Relations {
         conditionsFor.put(Events.o, new HashSet<String>() {{
             add(Events.n);
         }});
-        conditionsFor.put(Events.p, new HashSet<String>() {{
+        conditionsFor.put(Events.x, new HashSet<String>() {{
             add(Events.o);
+        }});
+        conditionsFor.put(Events.p, new HashSet<String>() {{
+            add(Events.x);
         }});
         conditionsFor.put(Events.q, new HashSet<String>() {{
             add(Events.o);
@@ -111,6 +114,7 @@ public class Relations {
         }});
         responsesTo.put(Events.k, new HashSet<String>() {{
             add(Events.l);
+            add(Events.p);
         }});
         responsesTo.put(Events.l, new HashSet<String>() {{
             add(Events.m);
@@ -120,6 +124,10 @@ public class Relations {
         }});
         responsesTo.put(Events.o, new HashSet<String>() {{
             add(Events.q);
+            add(Events.x);
+        }});
+        responsesTo.put(Events.x, new HashSet<String>() {{
+            add(Events.p);
         }});
         responsesTo.put(Events.q, new HashSet<String>() {{
             add(Events.r);
@@ -149,6 +157,7 @@ public class Relations {
         }});
         excludesTo.put(Events.k, new HashSet<String>() {{
             add(Events.n);
+            add(Events.x);
         }});
         excludesTo.put(Events.t, new HashSet<String>() {{
             add(Events.w);
